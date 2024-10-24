@@ -112,45 +112,18 @@ class Routes {
     return await Authing.idsToUsernames(await Friending.getFriends(user));
   }
 
+  @Router.post("/friends/:friend")
+  async addFriend(session: SessionDoc, friend: string) {
+    const user = Sessioning.getUser(session);
+    const friendOid = (await Authing.getUserByUsername(friend))._id;
+    return await Friending.addFriend(user, friendOid);
+  }
+
   @Router.delete("/friends/:friend")
   async removeFriend(session: SessionDoc, friend: string) {
     const user = Sessioning.getUser(session);
     const friendOid = (await Authing.getUserByUsername(friend))._id;
     return await Friending.removeFriend(user, friendOid);
-  }
-
-  @Router.get("/friend/requests")
-  async getRequests(session: SessionDoc) {
-    const user = Sessioning.getUser(session);
-    return await Responses.friendRequests(await Friending.getRequests(user));
-  }
-
-  @Router.post("/friend/requests/:to")
-  async sendFriendRequest(session: SessionDoc, to: string) {
-    const user = Sessioning.getUser(session);
-    const toOid = (await Authing.getUserByUsername(to))._id;
-    return await Friending.sendRequest(user, toOid);
-  }
-
-  @Router.delete("/friend/requests/:to")
-  async removeFriendRequest(session: SessionDoc, to: string) {
-    const user = Sessioning.getUser(session);
-    const toOid = (await Authing.getUserByUsername(to))._id;
-    return await Friending.removeRequest(user, toOid);
-  }
-
-  @Router.put("/friend/accept/:from")
-  async acceptFriendRequest(session: SessionDoc, from: string) {
-    const user = Sessioning.getUser(session);
-    const fromOid = (await Authing.getUserByUsername(from))._id;
-    return await Friending.acceptRequest(fromOid, user);
-  }
-
-  @Router.put("/friend/reject/:from")
-  async rejectFriendRequest(session: SessionDoc, from: string) {
-    const user = Sessioning.getUser(session);
-    const fromOid = (await Authing.getUserByUsername(from))._id;
-    return await Friending.rejectRequest(fromOid, user);
   }
 }
 
