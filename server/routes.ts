@@ -114,9 +114,18 @@ class Routes {
 
   @Router.post("/friends/:friend")
   async addFriend(session: SessionDoc, friend: string) {
-    const user = Sessioning.getUser(session);
+    const oid = Sessioning.getUser(session);
     const friendOid = (await Authing.getUserByUsername(friend))._id;
-    return await Friending.addFriend(user, friendOid);
+
+    const usrn = await Authing.getUserById(oid);
+    const friend_usrn = await Authing.getUserById(friendOid);
+
+    await Friending.addFriend(oid, friendOid); // throws an Error if already friends
+
+    // If Friending is successful, then we can add post to keep actions atomic
+    await Posting.create(oid, `I just became friends with ${friend_usrn}!`);
+    await Posting.create(friendOid, `I just became firends with ${usrn}!`);
+    return { msg: "Friended!" };
   }
 
   @Router.delete("/friends/:friend")
