@@ -10,17 +10,14 @@ const { isLoggedIn } = storeToRefs(useUserStore());
 
 const loaded = ref(false);
 let friends  = ref<Array<Record<string, string>>>([]);
-let searchAuthor = ref("");
 
-async function getFriends(author?: string) {
-  let query: Record<string, string> = author !== undefined ? { author } : {};
+async function getFriends() {
   let friendsResults;
   try {
-    friendsResults = await fetchy("/api/friends", "GET", { query });
+    friendsResults = await fetchy("/api/friends", "GET");
   } catch (_) {
     return;
   }
-  searchAuthor.value = author ? author : "";
   friends.value = friendsResults;
 }
 
