@@ -4,40 +4,27 @@ import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
 
-const props = defineProps(["post"]);
-const emit = defineEmits(["editPost", "refreshPosts"]);
+const props = defineProps(["friend"]);
+const emit = defineEmits(["refreshFriends"]);
 const { currentUsername } = storeToRefs(useUserStore());
 
-const deletePost = async () => {
+const deleteFriend = async () => {
   try {
-    await fetchy(`/api/posts/${props.post._id}`, "DELETE");
+    await fetchy(`/api/friends/${props.friend}`, "DELETE");
   } catch {
     return;
   }
-  emit("refreshPosts");
+  emit("refreshFriends");
 };
 </script>
 
 <template>
-  <p class="author">{{ props.post.author }}</p>
-  <p>{{ props.post.content }}</p>
+  <p class="friend">{{ props.friend}}</p>
   <div class="base">
-    <menu v-if="props.post.author == currentUsername">
-      <li><button class="btn-small pure-button" @click="emit('editPost', props.post._id)">Edit</button></li>
-      <li><button class="button-error btn-small pure-button" @click="deletePost">Delete</button></li>
-    </menu>
+    <li><button class="button-error btn-small pure-button" @click="deleteFriend">Unfriend</button></li>
     <article class="timestamp">
-      <p v-if="props.post.dateCreated !== props.post.dateUpdated">Edited on: {{ formatDate(props.post.dateUpdated) }}</p>
-      <p v-else>Created on: {{ formatDate(props.post.dateCreated) }}</p>
+      <p>Became Friends on: {{ formatDate(props.friend.dateCreated) }}</p>
     </article>
-  </div>
-  <div
-    v-if="$store.state.username !== null"
-    class="reactions"
-  >    
-    <CreateLikeComponent
-      v-bind:post="post"
-      />
   </div>
 </template>
 
@@ -46,7 +33,7 @@ p {
   margin: 0em;
 }
 
-.author {
+.friend {
   font-weight: bold;
   font-size: 1.2em;
 }
