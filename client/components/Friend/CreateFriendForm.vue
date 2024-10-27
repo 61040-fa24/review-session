@@ -2,13 +2,13 @@
 import { ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 
-const content = ref("");
+const friend = ref("");
 const emit = defineEmits(["refreshFriends"]);
 
-const createFriend = async (friend: string) => {
+const createFriend = async () => {
   try {
-    await fetchy("/api/friends", "POST", {
-      body: { friend },
+    await fetchy(`/api/friends/${friend.value}`, "POST", {
+      body: { friend: friend.value },
     });
   } catch (_) {
     return;
@@ -18,14 +18,14 @@ const createFriend = async (friend: string) => {
 };
 
 const emptyForm = () => {
-  content.value = "";
+  friend.value = "";
 };
 </script>
 
 <template>
-  <form @submit.prevent="createFriend(friend)">
+  <form @submit.prevent="createFriend">
     <label for="friend">Potential Friend Username:</label>
-    <textarea id="friend" v-model="friend" placeholder="Add a new Friend!" required> </textarea>
+    <input type="text" v-model="friend" id="friend" placeholder="Add a new Friend!" required />
     <button type="submit" class="pure-button-primary pure-button">Add Friend</button>
   </form>
 </template>

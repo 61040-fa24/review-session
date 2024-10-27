@@ -9,7 +9,7 @@ import { onBeforeMount, ref } from "vue";
 const { isLoggedIn } = storeToRefs(useUserStore());
 
 const loaded = ref(false);
-let friends  = ref<Array<Record<string, string>>>([]);
+let friends = ref<Array<Record<string, string>>>([]);
 
 async function getFriends() {
   let friendsResults;
@@ -22,7 +22,6 @@ async function getFriends() {
 }
 
 onBeforeMount(async () => {
-
   await getFriends();
   loaded.value = true;
 });
