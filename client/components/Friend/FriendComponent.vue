@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
 import { formatDate } from "@/utils/formatDate";
-import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
 
 const props = defineProps(["friend"]);
 const emit = defineEmits(["refreshFriends"]);
-const { currentUsername } = storeToRefs(useUserStore());
 
 const deleteFriend = async () => {
   try {
@@ -19,9 +16,9 @@ const deleteFriend = async () => {
 </script>
 
 <template>
-  <p class="friend">{{ props.friend}}</p>
+  <p class="friend">{{ props.friend }}</p>
   <div class="base">
-    <li><button class="button-error btn-small pure-button" @click="deleteFriend">Unfriend</button></li>
+    <button class="button-error btn-small pure-button" @click="deleteFriend">Unfriend</button>
     <article class="timestamp">
       <p>Became Friends on: {{ formatDate(props.friend.dateCreated) }}</p>
     </article>
