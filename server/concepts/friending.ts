@@ -26,15 +26,15 @@ export default class FriendingConcept {
     return { msg: "Friended!" };
   }
 
-  async removeFriend(user: ObjectId, friend: ObjectId) {
+  async removeFriend(user1: ObjectId, user2: ObjectId) {
     const friendship = await this.friends.popOne({
       $or: [
-        { user1: user, user2: friend },
-        { user1: friend, user2: user },
+        { user1: user1, user2: user2 },
+        { user1: user2, user2: user1 },
       ],
     });
     if (friendship === null) {
-      throw new FriendNotFoundError(user, friend);
+      throw new FriendNotFoundError(user1, user2);
     }
     return { msg: "Unfriended!" };
   }
