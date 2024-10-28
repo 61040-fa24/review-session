@@ -124,7 +124,7 @@ class Routes {
 
     // If Friending is successful, then we can add post to keep actions atomic
     await Posting.create(oid, `I just became friends with ${friend_usrn.username}!`);
-    await Posting.create(friendOid, `I just became firends with ${usrn.username}!`);
+    await Posting.create(friendOid, `I just became friends with ${usrn.username}!`);
     return { msg: "Friended!" };
   }
 
